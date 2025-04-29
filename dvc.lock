@@ -1,0 +1,82 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python -m backend.ml_models.prepare
+    deps:
+    - path: backend/ml_models/config.py
+      hash: md5
+      md5: bd4737dbb90e3c4661dbaed9b451d061
+      size: 950
+    - path: backend/ml_models/prepare.py
+      hash: md5
+      md5: 0e713401abd164c9423dbe56bdddc081
+      size: 7597
+    - path: backend/target/params.yaml
+      hash: md5
+      md5: 5e9318f0c2780c27350b9ddc522c639e
+      size: 13
+    outs:
+    - path: backend/target/temp_targets/X_train_master.pkl
+      hash: md5
+      md5: 64156d8abe3069d00227dbb59ef37d7b
+      size: 1135843
+    - path: backend/target/temp_targets/Y_train_master.pkl
+      hash: md5
+      md5: 697b8fa3e219c27734623c87841499a5
+      size: 390
+    - path: backend/target/temp_targets/auc_all_runs.pkl
+      hash: md5
+      md5: 95ccfd2e7be72a90b962d22a64a2910f
+      size: 292
+    - path: backend/target/temp_targets/fpr_list.pkl
+      hash: md5
+      md5: dcc50ec068e5af6be19317bd477fd243
+      size: 1310
+    - path: backend/target/temp_targets/tpr_list.pkl
+      hash: md5
+      md5: 320d5993937b2f2011d3fc0e64b131ee
+      size: 1310
+  predict_SE:
+    cmd: python -m backend.ml_models.predict_SE
+    deps:
+    - path: backend/ml_models/config.py
+      hash: md5
+      md5: bd4737dbb90e3c4661dbaed9b451d061
+      size: 950
+    - path: backend/ml_models/predict_SE.py
+      hash: md5
+      md5: 8568228e91e0a5bf7058dc586df17c78
+      size: 4007
+    - path: backend/target/inputted_features.pkl
+      hash: md5
+      md5: 2ae6cf15400818609321bdc9819d1ce9
+      size: 38010
+    - path: backend/target/params.yaml
+      hash: md5
+      md5: 5e9318f0c2780c27350b9ddc522c639e
+      size: 13
+    - path: backend/target/temp_targets/X_train_master.pkl
+      hash: md5
+      md5: 64156d8abe3069d00227dbb59ef37d7b
+      size: 1135843
+    - path: backend/target/temp_targets/Y_train_master.pkl
+      hash: md5
+      md5: 697b8fa3e219c27734623c87841499a5
+      size: 390
+    - path: backend/target/temp_targets/auc_all_runs.pkl
+      hash: md5
+      md5: 95ccfd2e7be72a90b962d22a64a2910f
+      size: 292
+    - path: backend/target/temp_targets/fpr_list.pkl
+      hash: md5
+      md5: dcc50ec068e5af6be19317bd477fd243
+      size: 1310
+    - path: backend/target/temp_targets/tpr_list.pkl
+      hash: md5
+      md5: 320d5993937b2f2011d3fc0e64b131ee
+      size: 1310
+    outs:
+    - path: backend/target/output.pkl
+      hash: md5
+      md5: 9b4c5efc1fd6cf29ca0cac1d68c1b853
+      size: 60

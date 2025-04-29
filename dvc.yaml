@@ -1,0 +1,27 @@
+stages:
+  prepare:
+    cmd: python -m backend.ml_models.prepare
+    deps:
+    - backend/ml_models/config.py
+    - backend/ml_models/prepare.py
+    - backend/target/params.yaml
+    outs:
+    - backend/target/temp_targets/X_train_master.pkl
+    - backend/target/temp_targets/Y_train_master.pkl
+    - backend/target/temp_targets/auc_all_runs.pkl
+    - backend/target/temp_targets/fpr_list.pkl
+    - backend/target/temp_targets/tpr_list.pkl
+  predict_SE:
+    cmd: python -m backend.ml_models.predict_SE
+    deps:
+    - backend/ml_models/config.py
+    - backend/ml_models/predict_SE.py
+    - backend/target/inputted_features.pkl
+    - backend/target/params.yaml
+    - backend/target/temp_targets/X_train_master.pkl
+    - backend/target/temp_targets/Y_train_master.pkl
+    - backend/target/temp_targets/auc_all_runs.pkl
+    - backend/target/temp_targets/fpr_list.pkl
+    - backend/target/temp_targets/tpr_list.pkl
+    outs:
+    - backend/target/output.pkl
