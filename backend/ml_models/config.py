@@ -1,7 +1,7 @@
 # Update config.py with new settings
 CONFIG = {
-    "model_path": "backend/model/AMPP.pkl",
-    "model_path_temp": "backend/model/AMPP_temp.pkl",
+    "model_path": "backend/models/AMPP.pkl",
+    "model_path_temp": "backend/models/AMPP_temp.pkl",
     "training_data_path": "backend/data/FVA_Bounds/",
     "training_ref_file_1": "backend/data/side_effects_vs_causative_drugs_meta.csv",
     "training_ref_file_2": "backend/data/drug_gene_targets_meta_1.csv",
