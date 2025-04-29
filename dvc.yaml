@@ -25,3 +25,16 @@ stages:
     - backend/target/temp_targets/tpr_list.pkl
     outs:
     - backend/target/output.pkl
+  train_AMPP:
+    cmd: python -m backend.ml_models.train_AMPP
+    deps:
+    - backend/ml_models/config.py
+    - backend/ml_models/prepare.py
+    - backend/ml_models/train_AMPP.py
+    - backend/target/temp_targets/X_train_master.pkl
+    - backend/target/temp_targets/Y_train_master.pkl
+    - backend/target/temp_targets/auc_all_runs.pkl
+    - backend/target/temp_targets/fpr_list.pkl
+    - backend/target/temp_targets/tpr_list.pkl
+    outs:
+    - backend/models/AMPP_temp.pkl
