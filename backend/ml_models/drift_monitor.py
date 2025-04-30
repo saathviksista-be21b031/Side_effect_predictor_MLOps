@@ -4,6 +4,8 @@ import numpy as np
 from sklearn.metrics.pairwise import pairwise_kernels
 from sklearn.metrics import mean_squared_error  # kept for structure (unused)
 from prometheus_client import Counter
+from prometheus_client import start_http_server
+
 
 drift_alert_counter = Counter('data_drift_alerts', 'Counts the number of data drift alerts detected')
 
@@ -65,6 +67,7 @@ def monitor_and_react(live_data, baseline_data):
         print("[Drift Monitor] No significant drift detected.")
     return drift
 
+drift_alert_counter.inc()
 if __name__ == "__main__":
     BASELINE_PATH = "backend/target/temp_targets/X_train_master.pkl"
     LIVE_PATH = "backend/target/inputted_features_2.pkl"
@@ -72,7 +75,8 @@ if __name__ == "__main__":
 
     baseline = load_pickle(BASELINE_PATH)
     live = load_pickle(LIVE_PATH)
-
+    print(live)
+    print(baseline)
     if hasattr(baseline, "values"):
         baseline = baseline.values
     if hasattr(live, "values"):
