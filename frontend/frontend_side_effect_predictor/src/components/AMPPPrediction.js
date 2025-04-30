@@ -1,4 +1,4 @@
-// src/components/AMPPPrediction.js
+// Refined AMPPPrediction.js
 import React, { useState } from 'react';
 import { predictAMPP } from '../services/api';
 
@@ -7,71 +7,56 @@ const AMPPPrediction = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
       setError(null);
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!file) {
-      setError("Please select a CSV file");
+      setError('Please upload a valid CSV file');
       return;
     }
-    
+
     try {
       setLoading(true);
       setError(null);
       setResult(null);
-      
       const response = await predictAMPP(file);
       setResult(response);
     } catch (err) {
-      setError(`Error making prediction: ${err.message}`);
+      setError(`Prediction failed: ${err.message}`);
     } finally {
       setLoading(false);
     }
   };
-  
+
   return (
-    <div className="ampp-prediction">
-      <h1>AMPP Prediction</h1>
-      
+    <div className="ampp-prediction refined-section">
+      <h1>Top 5 Side Effect Prediction</h1>
+
       <div className="instructions">
-        <h2>Instructions</h2>
-        <p>
-          Upload a CSV file containing your drug data. The file should have two columns:
-          the first column for one set of features and the second column for another set.
-          No header row is required.
-        </p>
-        <p>
-          The model will predict the top 5 most probable side effects for the uploaded drug data.
-        </p>
+        <h2>How to Use</h2>
+        <p>Upload your drug data in CSV format with two feature columns. The model returns the five most likely side effects.</p>
       </div>
-      
+
       {error && <div className="error-message">{error}</div>}
-      
-      <form onSubmit={handleSubmit}>
+
+      <form onSubmit={handleSubmit} className="refined-form">
         <div className="form-group">
-          <label htmlFor="drug-file">Upload Drug Data (CSV):</label>
-          <input 
-            id="drug-file"
-            type="file" 
-            accept=".csv" 
-            onChange={handleFileChange}
-            disabled={loading}
-          />
+          <label htmlFor="drug-file">Upload CSV File:</label>
+          <input id="drug-file" type="file" accept=".csv" onChange={handleFileChange} disabled={loading} />
         </div>
-        
+
         <button type="submit" disabled={loading || !file}>
-          {loading ? 'Processing...' : 'Predict Side Effects'}
+          {loading ? 'Predicting...' : 'Predict Side Effects'}
         </button>
       </form>
-      
+
       {result && (
         <div className="prediction-result">
           <h2>Prediction Results</h2>
@@ -83,3 +68,4 @@ const AMPPPrediction = () => {
 };
 
 export default AMPPPrediction;
+

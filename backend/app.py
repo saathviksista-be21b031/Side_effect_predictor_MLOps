@@ -31,32 +31,51 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve any files under backend/target via /pipeline/static/*
-app.mount(
-    "/pipeline/static",
-    StaticFiles(directory=PROJECT_ROOT / "backend" / "target"),
-    name="pipeline_static",
-)
+
+
+
+# Mount the static directory at /pipeline
+app.mount("/pipeline", StaticFiles(directory=PROJECT_ROOT / "backend" / "static"), name="pipeline")
 
 # Instrument all endpoints with Prometheus metrics
 Instrumentator().instrument(app).expose(app)
 
-
-@app.post("/predict")
+@app.post("/predict_AMPP")
 async def predict(file: UploadFile = File(...)):
     """
-    Given a CSV of FVA bounds (no header), return the top-5 most probable side-effects.
+    Upload a CSV of FVA bounds (no header). Runs drift monitoring and predicts top-5 side-effects.
     """
     try:
+        # 1. Read uploaded CSV and reshape into prediction input format
         contents = await file.read()
         df = pd.read_csv(io.BytesIO(contents), header=None)
         pred_df = pd.concat([df.iloc[:, 0], df.iloc[:, 1]], axis=0, ignore_index=True).to_frame().T
 
-        pred_probs = predict_AMPP.predict_from_df(pred_df)
-        top_5 = sorted(pred_probs.items(), key=lambda x: x[1], reverse=True)[:5]
+        # 2. Save as inputted_features.pkl
+        feats_path = PROJECT_ROOT / "backend" / "target" / "inputted_features_2.pkl"
+        with open(feats_path, "wb") as f:
+            pickle.dump(pred_df.values, f)
 
+        # 3. Run DVC stage: predict_AMPP (includes drift check + predict)
+        result = subprocess.run(
+            ["dvc", "repro", "predict_AMPP"],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            check=False
+        )
+        if result.returncode != 0:
+            return {"error": result.stderr}
+
+        # 4. Load predictions
+        out_path = PROJECT_ROOT / "backend" / "target" / "ampp_predictions.pkl"
+        with open(out_path, "rb") as f:
+            pred_probs = pickle.load(f)
+
+        # 5. Return top-5 predictions
+        top_5 = sorted(pred_probs.items(), key=lambda x: x[1], reverse=True)[:5]
         response = "The 5 most probable side effects are:\n"
-        response += "\n".join(f"{se}: {score:.4f}" for se, score in top_5)
+        response += "\n".join(se for se, _ in top_5)
         response += "\n(you may wish to translate CIDs to descriptions)"
         return PlainTextResponse(response)
 
@@ -66,7 +85,8 @@ async def predict(file: UploadFile = File(...)):
         return {"error": str(e), "traceback": tb}
 
 
-@app.post("/train")
+
+@app.post("/train_AMPP")
 async def train():
     """
     Re-run the DVC train_AMPP pipeline stage to retrain the full AMPP model.

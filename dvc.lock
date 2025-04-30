@@ -49,7 +49,7 @@ stages:
       size: 4007
     - path: backend/target/inputted_features.pkl
       hash: md5
-      md5: 45832ee44a10d4aa0e0126dcf0cd2203
+      md5: f5e796aa310ab2ec2a98613f00bcc821
       size: 38010
     - path: backend/target/params.yaml
       hash: md5
@@ -78,7 +78,7 @@ stages:
     outs:
     - path: backend/target/output.pkl
       hash: md5
-      md5: f74690656be04f427e3661990d92978d
+      md5: 04978c12fe75f435b992d66c297ddafa
       size: 60
   train_AMPP:
     cmd: python -m backend.ml_models.train_AMPP
@@ -120,3 +120,57 @@ stages:
       hash: md5
       md5: 00a3fdc846069e81db2fd8a4615a2b3b
       size: 569396
+  monitor_drift:
+    cmd: python -m backend.ml_models.drift_monitor
+    deps:
+    - path: backend/ml_models/drift_monitor.py
+      hash: md5
+      md5: 3bf42f98e22afd2aceddc134094bcabe
+      size: 1566
+    - path: backend/target/inputted_features.pkl
+      hash: md5
+      md5: 45832ee44a10d4aa0e0126dcf0cd2203
+      size: 38010
+    - path: backend/target/temp_targets/X_train_master.pkl
+      hash: md5
+      md5: 12a9248ba57553fc22822af4bac66b65
+      size: 1211555
+    outs:
+    - path: backend/target/drift_status.txt
+      hash: md5
+      md5: 23415343c19e8efa6b0a059fe5308f8e
+      size: 15
+  predict_AMPP:
+    cmd:
+    - python -m backend.ml_models.drift_monitor
+    - python -m backend.ml_models.predict_AMPP
+    deps:
+    - path: backend/ml_models/config.py
+      hash: md5
+      md5: 4f4c71de7bc0efc2f795919199b8b43a
+      size: 931
+    - path: backend/ml_models/drift_monitor.py
+      hash: md5
+      md5: fa4e0a7e059c9026c3b7c0732aea0a5b
+      size: 2889
+    - path: backend/ml_models/predict_AMPP.py
+      hash: md5
+      md5: 044747e4a382718fa24b86d5e3c447bc
+      size: 1273
+    - path: backend/target/inputted_features_2.pkl
+      hash: md5
+      md5: 400db839538d5095d7cf33c594d38a26
+      size: 38010
+    - path: backend/target/temp_targets/X_train_master.pkl
+      hash: md5
+      md5: 12a9248ba57553fc22822af4bac66b65
+      size: 1211555
+    outs:
+    - path: backend/target/ampp_predictions.pkl
+      hash: md5
+      md5: 7927ba027360d89795a5842e372db490
+      size: 8142
+    - path: backend/target/drift_status.txt
+      hash: md5
+      md5: 03d2dd7d7af8d205cb7332c289df91de
+      size: 9

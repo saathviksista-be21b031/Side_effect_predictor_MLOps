@@ -1,50 +1,47 @@
-// src/components/Dashboard.js
+// Updated Dashboard.js with polished layout and UI wording
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   return (
     <div className="dashboard">
-      <h1>Drug ML Platform</h1>
-      
+      <h1>Welcome to DrugSideFX</h1>
+
       <div className="dashboard-intro">
         <p>
-          Welcome to the Drug ML Platform. This application provides machine learning capabilities
-          for predicting drug side effects and interactions using advanced ML models.
+          Predict adverse effects of drug compounds using advanced machine learning models.
+          Upload your molecular data and get actionable insights instantly.
         </p>
       </div>
-      
+
       <div className="feature-cards">
         <div className="feature-card">
-          <h2>AMPP Prediction</h2>
+          <h2>Top 5 Side Effects</h2>
           <p>
-            Predict the most probable side effects for a drug using our AMPP model.
-            Upload your drug data and get the top 5 most probable side effects.
+            Upload your drug's data and receive the most likely 5 side effects predicted by our ensemble model.
           </p>
           <Link to="/ampp-prediction" className="feature-button">
-            Make AMPP Prediction
+            Predict Top 5
           </Link>
         </div>
-        
+
         <div className="feature-card">
-          <h2>Side Effect Prediction</h2>
+          <h2>Specific Side Effect</h2>
           <p>
-            Predict the probability of a specific side effect for a drug.
-            Specify the side effect and upload your drug data for analysis.
+            Wondering if a drug causes a particular side effect? Type it in and check its likelihood.
           </p>
           <Link to="/se-prediction" className="feature-button">
-            Predict Side Effect
+            Check Specific Effect
           </Link>
         </div>
-        
+
         <div className="feature-card">
           <h2>Model Training</h2>
           <p>
-            Train or retrain the AMPP model with new data to improve prediction accuracy.
-            Monitor training progress and performance metrics.
+            Retrain our prediction model using newly added drug data to enhance accuracy.
           </p>
           <Link to="/training" className="feature-button">
-            Train Model
+            Retrain Now
           </Link>
         </div>
       </div>

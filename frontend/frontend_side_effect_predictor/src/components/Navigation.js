@@ -1,12 +1,12 @@
-// src/components/Navigation.js
+// Updated Navigation.js with refined sidebar design
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Navigation = () => {
   return (
-    <nav className="sidebar">
+    <nav className="sidebar refined-sidebar">
       <div className="logo">
-        <h2>Drug ML Platform</h2>
+        <h2>DrugSideFX</h2>
       </div>
       <ul className="nav-links">
         <li>
@@ -16,25 +16,32 @@ const Navigation = () => {
         </li>
         <li>
           <NavLink to="/ampp-prediction" className={({ isActive }) => isActive ? 'active' : ''}>
-            AMPP Prediction
+            Top 5 Side Effects
           </NavLink>
         </li>
         <li>
           <NavLink to="/se-prediction" className={({ isActive }) => isActive ? 'active' : ''}>
-            Side Effect Prediction
+            Specific Side Effect
           </NavLink>
         </li>
         <li>
           <NavLink to="/training" className={({ isActive }) => isActive ? 'active' : ''}>
-            Model Training
+            Retrain Model
           </NavLink>
         </li>
+	<li>
+  	  <NavLink to="/pipeline" className={({ isActive }) => isActive ? 'active' : ''}>
+            ML Pipeline
+  	  </NavLink>
+        </li>
+
       </ul>
     </nav>
   );
 };
 
 export default Navigation;
+
 
 
 

@@ -1,4 +1,4 @@
-// src/App.js - Main application component
+// Fully refined App.js with ML Pipeline Visualization added
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import AMPPPrediction from './components/AMPPPrediction';
 import SideEffectPrediction from './components/SideEffectPrediction';
 import ModelTraining from './components/ModelTraining';
+import PipelineVisualization from './components/PipelineVisualization';
 import './App.css';
 
 function App() {
@@ -13,12 +14,13 @@ function App() {
     <Router>
       <div className="app-container">
         <Navigation />
-        <main className="content">
+        <main className="content refined-layout">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/ampp-prediction" element={<AMPPPrediction />} />
             <Route path="/se-prediction" element={<SideEffectPrediction />} />
             <Route path="/training" element={<ModelTraining />} />
+            <Route path="/pipeline" element={<PipelineVisualization />} />
           </Routes>
         </main>
       </div>
@@ -27,3 +29,4 @@ function App() {
 }
 
 export default App;
+

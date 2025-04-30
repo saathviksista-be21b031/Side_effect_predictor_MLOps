@@ -1,2 +1,4 @@
 /output.pkl
 /inputted_features.pkl
+/drift_status.txt
+/ampp_predictions.pkl

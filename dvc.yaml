@@ -1,4 +1,16 @@
 stages:
+  startup:
+    cmd: 
+    - mlflow server --host 127.0.0.1 --port 5000
+    - uvicorn backend.app:app --reload
+    - cd frontend/frontend_side_effect_predictor
+    - npm start
+    - cd ..
+    - cd ..
+    - #prometheus startup
+    - #grafana startup
+
+
   prepare:
     cmd: python -m backend.ml_models.prepare
     deps:
@@ -38,3 +50,21 @@ stages:
     - backend/target/temp_targets/tpr_list.pkl
     outs:
     - backend/models/AMPP_temp.pkl
+
+
+  predict_AMPP:
+    cmd:
+    - python -m backend.ml_models.drift_monitor 
+
+    - python -m backend.ml_models.predict_AMPP 
+
+    deps:
+    - backend/ml_models/config.py
+    - backend/ml_models/drift_monitor.py
+    - backend/ml_models/predict_AMPP.py
+    - backend/target/inputted_features_2.pkl
+    - backend/target/temp_targets/X_train_master.pkl
+
+    outs:
+    - backend/target/ampp_predictions.pkl
+    - backend/target/drift_status.txt
